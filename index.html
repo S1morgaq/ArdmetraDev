@@ -1,0 +1,327 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neon Dev Toolkit | Mehmet</title>
+<style>
+:root {
+  --bg: #070914;
+  --panel: #101426;
+  --border: #252c46;
+  --cyan: #22d3ee;
+  --purple: #8b5cf6;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(ellipse at top, #17153a, var(--bg) 65%);
+  color: var(--text);
+  font-family: Inter, system-ui, sans-serif;
+}
+header {
+  text-align: center;
+  padding: 55px 20px 30px;
+}
+.tag {
+  color: var(--cyan);
+  letter-spacing: 4px;
+  font-size: 11px;
+  font-weight: 800;
+}
+h1 {
+  font-size: clamp(32px, 7vw, 58px);
+  margin: 16px 0 10px;
+  letter-spacing: -2px;
+}
+h1 span {
+  background: linear-gradient(90deg, var(--cyan), var(--purple));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+header p, .muted { color: var(--muted); }
+.clock {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--cyan);
+  margin-top: 22px;
+  font-variant-numeric: tabular-nums;
+}
+main {
+  width: min(1000px, 92%);
+  margin: 0 auto 50px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+.card {
+  padding: 24px;
+  background: #101426dd;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 10px 35px #0002;
+  transition: .2s;
+}
+.card:hover {
+  border-color: #22d3ee80;
+  transform: translateY(-3px);
+}
+h2 { font-size: 18px; margin-top: 0; }
+input, textarea, select {
+  width: 100%;
+  padding: 12px;
+  margin: 7px 0;
+  color: var(--text);
+  background: #080b18;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  outline: none;
+  font: inherit;
+}
+input:focus, textarea:focus { border-color: var(--cyan); }
+textarea { min-height: 100px; resize: vertical; }
+button {
+  padding: 11px 15px;
+  border: 0;
+  border-radius: 9px;
+  background: linear-gradient(100deg, #0891b2, #6d42d8);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: .2s;
+}
+button:hover { filter: brightness(1.2); }
+button.secondary {
+  background: #202740;
+  border: 1px solid var(--border);
+}
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.result {
+  color: var(--cyan);
+  overflow-wrap: anywhere;
+  min-height: 22px;
+  margin-top: 14px;
+  font-size: 14px;
+}
+.stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 14px 0;
+}
+.stat {
+  background: #080b18;
+  border: 1px solid var(--border);
+  padding: 12px;
+  border-radius: 10px;
+  flex: 1;
+  text-align: center;
+}
+.stat strong { display: block; font-size: 21px; color: var(--cyan); }
+footer {
+  text-align: center;
+  padding: 25px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+}
+footer a { color: var(--cyan); text-decoration: none; }
+</style>
+</head>
+<body>
+<header>
+  <div class="tag">PERSONAL DEVELOPER TOOLKIT</div>
+  <h1>NEON <span>TOOLKIT</span></h1>
+  <p>Small tools. Clean design. Zero unnecessary complexity.</p>
+  <div class="clock" id="clock">00:00:00</div>
+  <div class="muted" id="date"></div>
+</header>
+
+<main>
+  <section class="card">
+    <h2>🔐 Password Generator</h2>
+    <p class="muted">Generate a random password locally.</p>
+    <label for="length">Password length</label>
+    <input id="length" type="number" min="8" max="64" value="20">
+    <div class="actions">
+      <button onclick="generatePassword()">Generate</button>
+      <button class="secondary" onclick="copyText('password')">Copy</button>
+    </div>
+    <div class="result" id="password">Your password appears here.</div>
+  </section>
+
+  <section class="card">
+    <h2>📝 Text Analyzer</h2>
+    <p class="muted">Count words, characters and lines instantly.</p>
+    <textarea id="textInput" placeholder="Type or paste your text here..." oninput="analyze()"></textarea>
+    <div class="stats">
+      <div class="stat"><strong id="words">0</strong><small>Words</small></div>
+      <div class="stat"><strong id="chars">0</strong><small>Characters</small></div>
+      <div class="stat"><strong id="lines">0</strong><small>Lines</small></div>
+    </div>
+    <button class="secondary" onclick="clearText()">Clear text</button>
+  </section>
+
+  <section class="card">
+    <h2>⚡ Quick Notes</h2>
+    <p class="muted">Write a note and save it in this browser.</p>
+    <textarea id="notes" placeholder="Your notes..."></textarea>
+    <div class="actions">
+      <button onclick="saveNotes()">Save note</button>
+      <button class="secondary" onclick="loadNotes()">Load note</button>
+    </div>
+    <div class="result" id="noteStatus"></div>
+  </section>
+
+  <section class="card">
+    <h2>🧮 Quick Calculator</h2>
+    <p class="muted">Calculate two numbers.</p>
+    <input id="num1" type="number" placeholder="First number">
+    <select id="operator" aria-label="Operation">
+      <option value="+">Addition (+)</option>
+      <option value="-">Subtraction (-)</option>
+      <option value="*">Multiplication (×)</option>
+      <option value="/">Division (÷)</option>
+      <option value="%">Remainder (%)</option>
+    </select>
+    <input id="num2" type="number" placeholder="Second number">
+    <button onclick="calculate()">Calculate</button>
+    <div class="result" id="calcResult">Result will appear here.</div>
+  </section>
+
+  <section class="card">
+    <h2>🎲 Random Number</h2>
+    <p class="muted">Generate a number within your chosen range.</p>
+    <input id="min" type="number" value="1" placeholder="Minimum">
+    <input id="max" type="number" value="100" placeholder="Maximum">
+    <button onclick="randomNumber()">Generate number</button>
+    <div class="result" id="randomResult">Ready when you are.</div>
+  </section>
+
+  <section class="card">
+    <h2>🛠️ About This Project</h2>
+    <p class="muted">
+      A lightweight browser toolkit built with HTML, CSS and vanilla JavaScript.
+      No framework, server or API key required.
+    </p>
+    <div class="actions">
+      <button onclick="showAbout()">Project info</button>
+      <button class="secondary" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top ↑</button>
+    </div>
+    <div class="result" id="aboutResult"></div>
+  </section>
+</main>
+
+<footer>
+  Built with ☕ by <strong>Mehmet</strong> ·
+  <a href="https://github.com/USERNAME">GitHub</a> ·
+  <span>Neon Dev Toolkit</span>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+function updateClock() {
+  const now = new Date();
+  $("clock").textContent = now.toLocaleTimeString("tr-TR");
+  $("date").textContent = now.toLocaleDateString("tr-TR", {
+    weekday: "long", year: "numeric", month: "long", day: "numeric"
+  });
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+function generatePassword() {
+  const length = Number($("length").value);
+  if (!Number.isInteger(length) || length < 8 || length > 64) {
+    $("password").textContent = "Choose a length between 8 and 64.";
+    return;
+  }
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%&*?";
+  const random = new Uint32Array(length);
+  crypto.getRandomValues(random);
+  $("password").textContent =
+    Array.from(random, n => chars[n % chars.length]).join("");
+}
+
+async function copyText(id) {
+  const value = $(id).textContent;
+  if (!value || value.includes("appears here")) return;
+  try {
+    await navigator.clipboard.writeText(value);
+    if (id === "password") $("password").textContent = value + "  ✓";
+  } catch {
+    alert("Clipboard access unavailable. Please select and copy the text.");
+  }
+}
+
+function analyze() {
+  const value = $("textInput").value;
+  $("words").textContent = value.trim() ? value.trim().split(/\s+/).length : 0;
+  $("chars").textContent = value.length;
+  $("lines").textContent = value ? value.split(/\r\n|\r|\n/).length : 0;
+}
+function clearText() {
+  $("textInput").value = "";
+  analyze();
+}
+
+function saveNotes() {
+  try {
+    localStorage.setItem("neon-toolkit-notes", $("notes").value);
+    $("noteStatus").textContent = "✓ Note saved in this browser.";
+  } catch {
+    $("noteStatus").textContent = "Unable to save notes in this browser.";
+  }
+}
+function loadNotes() {
+  try {
+    $("notes").value = localStorage.getItem("neon-toolkit-notes") || "";
+    $("noteStatus").textContent = "✓ Note loaded.";
+  } catch {
+    $("noteStatus").textContent = "Unable to load notes.";
+  }
+}
+
+function calculate() {
+  const a = Number($("num1").value);
+  const b = Number($("num2").value);
+  if ($("num1").value.trim() === "" || $("num2").value.trim() === "") {
+    $("calcResult").textContent = "Enter both numbers.";
+    return;
+  }
+  const op = $("operator").value;
+  if ((op === "/" || op === "%") && b === 0) {
+    $("calcResult").textContent = "Cannot divide by zero.";
+    return;
+  }
+  const result = {
+    "+": () => a + b, "-": () => a - b,
+    "*": () => a * b, "/": () => a / b, "%": () => a % b
+  }[op]();
+  $("calcResult").textContent = "Result: " + result;
+}
+
+function randomNumber() {
+  const min = Number($("min").value);
+  const max = Number($("max").value);
+  if (!Number.isSafeInteger(min) || !Number.isSafeInteger(max) ||
+      min > max || max - min > 1000000000) {
+    $("randomResult").textContent = "Enter a valid integer range.";
+    return;
+  }
+  $("randomResult").textContent =
+    "Your number: " + (min + Math.floor(Math.random() * (max - min + 1)));
+}
+
+function showAbout() {
+  $("aboutResult").textContent =
+    "Neon Dev Toolkit · HTML5 + CSS3 + JavaScript · Single-file project.";
+}
+</script>
+</body>
+</html>
