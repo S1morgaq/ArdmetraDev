@@ -1,7 +1,7 @@
 
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&height=260&color=0:050816,35:312e81,70:0e7490,100:06b6d4&text=MEHMET&fontColor=ffffff&fontSize=76&fontAlignY=38&desc=DEVELOPER%20%7C%20CREATOR%20%7C%20INNOVATOR&descAlignY=60&descSize=17&animation=fadeIn" width="100%" alt="Mehmet — Developer Portfolio"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&height=260&color=0:050816,35:312e81,70:0e7490,100:06b6d4&text=MEHMET&ArdmetraDEV&fontColor=ffffff&fontSize=76&fontAlignY=38&desc=DEVELOPER%20%7C%20CREATOR%20%7C%20INNOVATOR&descAlignY=60&descSize=17&animation=fadeIn" width="100%" alt="Mehmet — Developer Portfolio"/>
 
 <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=19&duration=2500&pause=700&color=22D3EE&center=true&vCenter=true&width=850&height=55&lines=Building+Ideas+Into+Reality.;Code.+Create.+Innovate.;Web+Development+%7C+Automation+%7C+Bots;Always+Learning.+Always+Building." alt="Animated introduction"/>
 
